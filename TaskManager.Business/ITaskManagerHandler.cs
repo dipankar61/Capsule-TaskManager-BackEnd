@@ -9,7 +9,7 @@ namespace TaskManager.Business
     public interface ITaskManagerHandler
     {
         void AddNewTask(Task task);
-        List<TaskView> GetAllTask();
+        List<Task> GetAllTask();
         List<Task> GetAllParentTask();
         void EditTask(Task task);
         void DeleteTask(Task task);

@@ -12,6 +12,7 @@ namespace TaskManager.DataAccess
         public DbSet<Task> Tasks { get; set; }
         public TaskManagerContext() : base("name=TaskMangerDbConString")
         {
+            this.Configuration.LazyLoadingEnabled = false;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<TaskManagerContext,
                                       TaskManager.DataAccess.Migrations.Configuration>("TaskMangerDbConString"));
 

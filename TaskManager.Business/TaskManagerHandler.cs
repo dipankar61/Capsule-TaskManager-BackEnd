@@ -48,9 +48,14 @@ namespace TaskManager.Business
             }
             else
             {
+                bool isStartDateValidationPass = true;
+                bool isEndDateValidationPass = true;
                 var childTasks = GetChildTasks(task);
-                var isStartDateValidationPass = IsEditedParentStartDateValid(childTasks, task);
-                var isEndDateValidationPass = IsEditedParentEndDateValid(childTasks, task);
+                if (childTasks.Count > 0)
+                {
+                   isStartDateValidationPass = IsEditedParentStartDateValid(childTasks, task);
+                   isEndDateValidationPass = IsEditedParentEndDateValid(childTasks, task);
+                }
                 if (childTasks.Count==0 || (isStartDateValidationPass && isEndDateValidationPass))
                     taskRepo.EditTask(task);
                 else
@@ -72,14 +77,43 @@ namespace TaskManager.Business
             }
         }
 
-        public List<DataAccess.Task> GetAllParentTask()
+        public List<TaskView> GetAllParentTask()
         {
-            return taskRepo.GetAllTask().Where(objTask => taskRepo.GetAllTask().Any(ptask=>ptask.ParentTaskId== objTask.TaskId) && !objTask.EndDate.HasValue).ToList();
+            var lstParentTask = new List<TaskView>();
+            var parentTasks = taskRepo.GetAllTask().Where(t=>!t.EndDate.HasValue).ToList();
+            //var parentTasks= taskRepo.GetAllTask().Where(objTask => taskRepo.GetAllTask().Any(ptask=>ptask.ParentTaskId== objTask.TaskId) && !objTask.EndDate.HasValue).ToList();
+            parentTasks.ToList().ForEach(objTask =>
+            {
+                var taskview = new TaskView();
+                taskview.TaskId = objTask.TaskId;
+                taskview.TaskName = objTask.TaskName;
+                taskview.StartDate = objTask.StartDate;
+                taskview.EndDate = objTask.EndDate;
+                taskview.Priority = objTask.Priority;
+                taskview.ParentTaskId = objTask.ParentTaskId;
+                lstParentTask.Add(taskview);
+            }
+            );
+            return lstParentTask;
         }
 
-        public List<DataAccess.Task> GetAllTask()
+        public List<TaskView> GetAllTask()
         {
-            return taskRepo.GetAllTask().ToList();
+            var lstTask = new List<TaskView>();
+            var allTasks = taskRepo.GetAllTask().ToList();
+            allTasks.ToList().ForEach(objTask => {
+                var taskview = new TaskView();
+                taskview.TaskId = objTask.TaskId;
+                taskview.TaskName = objTask.TaskName;
+                taskview.StartDate = objTask.StartDate;
+                taskview.EndDate = objTask.EndDate;
+                taskview.Priority = objTask.Priority;
+                taskview.ParentTaskId = objTask.ParentTaskId;
+                taskview.ParentTaskName = objTask.ParentTaskId.HasValue ? taskRepo.GetTaskByID(objTask.ParentTaskId.Value).TaskName : null;
+                lstTask.Add(taskview);
+            }
+            );
+            return lstTask;
         }
         private List<DataAccess.Task> GetChildTasks(DataAccess.Task task)
         {
@@ -92,7 +126,7 @@ namespace TaskManager.Business
         }
         private bool IsEditedParentEndDateValid(List<DataAccess.Task> childTasks, DataAccess.Task task)
         {
-            return childTasks.All(t => t.EndDate < task.EndDate);
+            return childTasks.All(t => !task.EndDate.HasValue ||(t.EndDate.HasValue && t.EndDate < task.EndDate));
         }
         
     }

@@ -11,6 +11,7 @@ namespace TaskManager.DataAccess
         void AddTask(Task task);
         void EditTask(Task task);
         IQueryable<Task> GetAllTask();
+        //IQueryable<Task> GetAllParentTasks();
         void DeleteTask(Task task);
         Task GetTaskByID(int taskID);
         Task GetTaskByName(string name);

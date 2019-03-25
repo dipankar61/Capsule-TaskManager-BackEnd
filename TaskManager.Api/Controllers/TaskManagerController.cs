@@ -19,11 +19,11 @@ namespace TaskManager.Api.Controllers
             this.context = new TaskManagerContext();
             handlerTaskManger = new TaskManagerHandler(new TaskRepository(context));
         }
-        public IHttpActionResult GetAllTasks()
+        public IHttpActionResult GetAllTasks(bool isParentonly)
         {
             try
             {
-                var tasklist = handlerTaskManger.GetAllTask();
+                var tasklist = !isParentonly ? handlerTaskManger.GetAllTask() : handlerTaskManger.GetAllParentTask();
                 if (tasklist.Count == 0)
                     return NotFound();
                 return Ok(tasklist);
@@ -37,6 +37,7 @@ namespace TaskManager.Api.Controllers
                 context.Dispose();
             }
         }
+       
         public IHttpActionResult PostNewTask(Task task)
         {
             try
@@ -87,7 +88,7 @@ namespace TaskManager.Api.Controllers
         {
             foreach (var dicItem in customEx.ErrorCollection)
             {
-                modleState.AddModelError(dicItem.Key, dicItem.Value);
+                 modleState.AddModelError(dicItem.Key, dicItem.Value);
             }
             return BadRequest(modleState);
 

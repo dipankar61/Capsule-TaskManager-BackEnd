@@ -58,6 +58,10 @@ namespace TaskManager.DataAccess
             return ctx.Tasks;
           
         }
+        //public IQueryable<Task> GetAllParentTasks()
+        //{
+        //    return ctx.Tasks.Include("TasksUnderParents").Where(t => (t.TasksUnderParents.Count > 0 && !t.EndDate.HasValue) || !t.ParentTaskId.HasValue);
+        //}
 
         public Task GetTaskByID(int taskID)
         {

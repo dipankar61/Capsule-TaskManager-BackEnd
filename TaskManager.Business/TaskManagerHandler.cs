@@ -80,7 +80,7 @@ namespace TaskManager.Business
         public List<TaskView> GetAllParentTask()
         {
             var lstParentTask = new List<TaskView>();
-            var parentTasks = taskRepo.GetAllTask().Where(t=>!t.EndDate.HasValue).ToList();
+            var parentTasks = taskRepo.GetAllTask().Where(t=>!t.EndDate.HasValue || t.EndDate.Value>DateTime.Now).ToList();
             //var parentTasks= taskRepo.GetAllTask().Where(objTask => taskRepo.GetAllTask().Any(ptask=>ptask.ParentTaskId== objTask.TaskId) && !objTask.EndDate.HasValue).ToList();
             parentTasks.ToList().ForEach(objTask =>
             {

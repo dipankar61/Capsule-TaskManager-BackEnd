@@ -73,7 +73,7 @@ namespace TaskManager.DataAccess
         public Task GetTaskByName(string name)
         {
             
-            return ctx.Tasks.Where(objtask => objtask.TaskName == name && !objtask.EndDate.HasValue).SingleOrDefault();
+            return ctx.Tasks.Where(objtask => objtask.TaskName == name && (!objtask.EndDate.HasValue || objtask.EndDate.Value>DateTime.Now)).SingleOrDefault();
           
         }
     }

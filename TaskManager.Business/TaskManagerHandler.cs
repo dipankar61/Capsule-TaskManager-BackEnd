@@ -126,7 +126,7 @@ namespace TaskManager.Business
         }
         private bool IsEditedParentEndDateValid(List<DataAccess.Task> childTasks, DataAccess.Task task)
         {
-            return childTasks.All(t => !task.EndDate.HasValue ||(t.EndDate.HasValue && t.EndDate < task.EndDate));
+            return childTasks.All(t => !task.EndDate.HasValue ||(t.EndDate.HasValue && t.EndDate.Value < task.EndDate.Value));
         }
         
     }

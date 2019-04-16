@@ -11,6 +11,7 @@ namespace TaskManager.Business
         void AddNewTask(Task task);
         List<TaskView> GetAllTask();
         List<TaskView> GetAllParentTask();
+        TaskView GetTask(int id);
         void EditTask(Task task);
         void DeleteTask(Task task);
     }

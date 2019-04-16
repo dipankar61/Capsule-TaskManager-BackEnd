@@ -37,7 +37,23 @@ namespace TaskManager.Api.Controllers
                 context.Dispose();
             }
         }
-       
+        public IHttpActionResult GetTaskByID(int Id)
+        {
+            try
+            {
+                var task = handlerTaskManger.GetTask(Id);
+                return Ok(task);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+            finally
+            {
+                context.Dispose();
+            }
+        }
+
         public IHttpActionResult PostNewTask(Task task)
         {
             try

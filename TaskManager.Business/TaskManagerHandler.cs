@@ -115,6 +115,19 @@ namespace TaskManager.Business
             );
             return lstTask;
         }
+        public TaskView GetTask(int id)
+        {
+            var task = taskRepo.GetTaskByID(id);
+            var taskview = new TaskView();
+            taskview.TaskId = task.TaskId;
+            taskview.TaskName = task.TaskName;
+            taskview.StartDate = task.StartDate;
+            taskview.EndDate = task.EndDate;
+            taskview.Priority = task.Priority;
+            taskview.ParentTaskId = task.ParentTaskId;
+            taskview.ParentTaskName = task.ParentTaskId.HasValue ? taskRepo.GetTaskByID(task.ParentTaskId.Value).TaskName : null;
+            return taskview;
+        }
         private List<DataAccess.Task> GetChildTasks(DataAccess.Task task)
         {
             return taskRepo.GetAllTask().Where(objTask => objTask.ParentTaskId == task.TaskId).ToList();

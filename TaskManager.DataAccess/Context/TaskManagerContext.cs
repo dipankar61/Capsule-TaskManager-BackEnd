@@ -9,7 +9,7 @@ namespace TaskManager.DataAccess
 {
     public class TaskManagerContext : DbContext
     {
-        public DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
         public TaskManagerContext() : base("name=TaskMangerDbConString")
         {
             this.Configuration.LazyLoadingEnabled = false;
